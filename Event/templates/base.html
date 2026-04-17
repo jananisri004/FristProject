@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>JanaDecors</title>
+
+    {% load static %}
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+
+    <style>
+    /* 🌈 BACKGROUND */
+    body {
+        background: linear-gradient(135deg, #f8f9fa, #e3f2fd);
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    /* 🔮 NAVBAR GLASS */
+    .navbar {
+        backdrop-filter: blur(10px);
+        background: rgba(0,0,0,0.7) !important;
+    }
+
+    /* 🎯 HERO */
+    .hero {
+        background: linear-gradient(45deg, #ff6b6b, #6c5ce7);
+        color: white;
+        padding: 30px;
+        border-radius: 20px;
+    }
+
+    /* 🧱 CARD */
+    .card {
+        border-radius: 20px;
+        overflow: hidden;
+        transition: 0.3s;
+    }
+
+    .card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0px 10px 25px rgba(0,0,0,0.2);
+    }
+
+    /* 🖼 IMAGE */
+    .card img {
+        height: 220px;
+        object-fit: cover;
+        transition: 0.3s;
+    }
+
+    .card img:hover {
+        transform: scale(1.08);
+    }
+
+    /* 🏷 BADGE */
+    .badge {
+        border-radius: 20px;
+        font-size: 13px;
+    }
+
+    /* 🔘 BUTTON */
+    .btn {
+        border-radius: 25px;
+    }
+
+    /* 🔤 INPUT */
+    input, select, textarea {
+        border-radius: 10px !important;
+    }
+
+    /* 📱 MOBILE RESPONSIVE */
+    @media (max-width: 768px) {
+        .hero {
+            padding: 20px;
+        }
+
+        .card img {
+            height: 180px;
+        }
+    }
+
+    /* 👇 FOOTER */
+    footer {
+        font-size: 14px;
+    }
+    </style>
+</head>
+
+<body>
+
+<!-- 🔝 NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dark shadow">
+<div class="container">
+
+<a class="navbar-brand fw-bold" href="{% url 'plans' %}">
+    🎉 JanaDecors
+</a>
+
+<!-- ☰ MOBILE MENU -->
+<button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+  <i class="bi bi-list text-white fs-4"></i>
+</button>
+
+<div class="collapse navbar-collapse" id="navMenu">
+  <ul class="navbar-nav me-auto ms-3 gap-1">
+    <li class="nav-item"><a class="nav-link" href="{% url 'plans' %}"><i class="bi bi-house me-1"></i>Home</a></li>
+    {% if user.is_authenticated %}
+    <li class="nav-item"><a class="nav-link" href="{% url 'my_bookings' %}"><i class="bi bi-calendar2-check me-1"></i>My Bookings</a></li>
+    <li class="nav-item"><a class="nav-link" href="{% url 'wishlist' %}"><i class="bi bi-heart me-1"></i>Wishlist</a></li>
+    {% if user.is_staff %}
+    <li class="nav-item"><a class="nav-link" href="{% url 'admin_dashboard' %}"><i class="bi bi-speedometer2 me-1"></i>Admin</a></li>
+    {% endif %}
+    {% endif %}
+  </ul>
+
+  <div class="d-flex align-items-center gap-2">
+    {% if user.is_authenticated %}
+      <span class="text-white-50 d-none d-lg-block" style="font-size:.82rem;">
+        <i class="bi bi-person-circle me-1"></i>{{ user.username }}
+        {% if user.is_staff %}<span class="badge bg-danger ms-1">Admin</span>{% endif %}
+      </span>
+      <form action="{% url 'logout' %}" method="POST" class="m-0">
+        {% csrf_token %}
+        <button class="btn btn-nav-outline btn-sm">
+          <i class="bi bi-box-arrow-right me-1"></i>Logout
+        </button>
+      </form>
+    {% else %}
+      <a href="{% url 'user_login' %}" class="btn-nav-outline px-3 py-2 rounded">
+        <i class="bi bi-person me-1"></i>User Login
+      </a>
+      <a href="{% url 'admin_login' %}" class="btn-nav-gold px-3 py-2 rounded">
+        <i class="bi bi-shield-lock me-1"></i>Admin
+      </a>
+      <a href="{% url 'register' %}" class="btn-nav-outline px-3 py-2 rounded">
+        <i class="bi bi-person-plus me-1"></i>Register
+      </a>
+    {% endif %}
+  </div>
+</div>
+
+</div>
+</nav>
+
+<!-- 📦 CONTENT -->
+<div class="container mt-4">
+    {% block content %}
+    {% endblock %}
+</div>
+
+<!-- 👇 FOOTER -->
+<footer class="text-center mt-5 mb-3 text-muted">
+    © 2026 JanaDecors | Made with ❤️
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

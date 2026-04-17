@@ -1,0 +1,205 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="card shadow p-4">
+
+<div id="carouselExample" class="carousel slide mb-3">
+<div class="carousel-inner">
+
+<div class="carousel-item active">
+<img src="{{ plan.image.url }}" class="d-block w-100" style="height:400px; object-fit:cover;">
+</div>
+
+</div>
+</div>
+
+<!-- ── LEFT COLUMN ── -->
+  <div class="col-lg-8">
+
+    <!-- HERO IMAGE -->
+    {% if plan.image %}
+    <img src="{{ plan.image.url }}" alt="{{ plan.name }}" class="plan-hero mb-4">
+    {% else %}
+    <div class="plan-hero-placeholder mb-4">🌸</div>
+    {% endif %}
+
+    <!-- CATEGORY TAG -->
+    {% if plan.category %}
+    <div class="plan-category-tag">
+      <i class="bi bi-tag-fill"></i>{{ plan.category }}
+    </div>
+    {% endif %}
+
+    <!-- NAME -->
+    <h1 class="plan-name">{{ plan.name }}</h1>
+
+    <!-- RATING -->
+    {% if plan.avg_rating %}
+    <div class="plan-rating">
+      <span class="stars-gold">
+        {% for i in "12345" %}
+          {% if forloop.counter <= plan.avg_rating %}
+          <i class="bi bi-star-fill"></i>
+          {% else %}
+          <i class="bi bi-star"></i>
+          {% endif %}
+        {% endfor %}
+      </span>
+      <span><strong>{{ plan.avg_rating }}</strong> / 5</span>
+      <span>·</span>
+      <span>{{ plan.review_count|default:'0' }} reviews</span>
+    </div>
+    {% endif %}
+
+    <!-- PRICE -->
+    <div class="plan-price-row">
+      <div class="plan-price">₹{{ plan.price }}</div>
+      <div class="plan-price-label">per event</div>
+    </div>
+
+    <!-- INFO CHIPS -->
+    <div class="info-chips">
+      <span class="info-chip"><i class="bi bi-geo-alt-fill"></i>Tamil Nadu</span>
+      <span class="info-chip"><i class="bi bi-clock-fill"></i>Full-day service</span>
+      <span class="info-chip"><i class="bi bi-people-fill"></i>Any guest count</span>
+      <span class="info-chip"><i class="bi bi-shield-check-fill"></i>Verified decorator</span>
+    </div>
+
+    <!-- DESCRIPTION -->
+    <div class="plan-section-label">
+      <i class="bi bi-info-circle" style="color:#c9a96e;"></i>About This Plan
+    </div>
+    <p class="plan-description">{{ plan.description }}</p>
+
+    <!-- FEATURES -->
+    {% if plan.features %}
+    <div class="plan-section-label">
+      <i class="bi bi-check2-circle" style="color:#c9a96e;"></i>What's Included
+    </div>
+    <div class="features-grid mb-4">
+      {% for feature in plan.features %}
+      <div class="feature-item">
+        <i class="bi bi-check-circle-fill"></i>{{ feature }}
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- DEFAULT FEATURES IF NONE SET -->
+    {% if not plan.features %}
+    <div class="plan-section-label">
+      <i class="bi bi-check2-circle" style="color:#c9a96e;"></i>What's Included
+    </div>
+    <div class="features-grid mb-4">
+      <div class="feature-item"><i class="bi bi-check-circle-fill"></i>Full setup & decoration</div>
+      <div class="feature-item"><i class="bi bi-check-circle-fill"></i>On-site coordinator</div>
+      <div class="feature-item"><i class="bi bi-check-circle-fill"></i>Premium materials</div>
+      <div class="feature-item"><i class="bi bi-check-circle-fill"></i>Post-event cleanup</div>
+      <div class="feature-item"><i class="bi bi-check-circle-fill"></i>Custom theme design</div>
+      <div class="feature-item"><i class="bi bi-check-circle-fill"></i>Free consultation</div>
+    </div>
+    {% endif %}
+
+  </div>
+
+  <!-- ── RIGHT COLUMN ── -->
+  <div class="col-lg-4">
+    <div class="book-card-wrap">
+
+      <!-- BOOK CARD -->
+      <div class="book-card">
+        <div class="book-card-header">
+          <div>
+            <div class="book-card-header-title">Ready to Book?</div>
+            <div class="book-card-header-sub">Secure your event date today</div>
+          </div>
+          <i class="bi bi-calendar2-heart" style="font-size:1.6rem;color:rgba(201,169,110,.5);"></i>
+        </div>
+
+        <div class="book-card-body">
+          <!-- PRICE BREAKDOWN -->
+          <div class="price-breakdown">
+            <div class="price-row">
+              <span>Base price</span>
+              <span class="amount">₹{{ plan.price }}</span>
+            </div>
+            <div class="price-row">
+              <span>Consultation</span>
+              <span style="color:#198754;font-weight:600;">Free</span>
+            </div>
+            <div class="price-row total">
+              <span>Starting from</span>
+              <span class="amount">₹{{ plan.price }}</span>
+            </div>
+          </div>
+
+          <!-- BOOK BUTTON -->
+          <a href="{% url 'book' plan.id %}" class="btn-book-now">
+            <i class="bi bi-calendar-check-fill"></i>
+            Book This Plan
+          </a>
+
+          <!-- BACK BUTTON -->
+          <a href="{% url 'plans' %}" class="btn-back">
+            <i class="bi bi-arrow-left"></i>
+            Browse All Plans
+          </a>
+
+          <!-- TRUST BADGES -->
+          <div class="trust-row">
+            <div class="trust-badge"><i class="bi bi-shield-fill-check"></i>Secure booking</div>
+            <div class="trust-badge"><i class="bi bi-telephone-fill"></i>24hr support</div>
+            <div class="trust-badge"><i class="bi bi-star-fill"></i>Top rated</div>
+            <div class="trust-badge"><i class="bi bi-cash-stack"></i>No hidden fees</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WHATSAPP CARD -->
+      <div class="whatsapp-card">
+        <div class="whatsapp-card-label">Have questions?</div>
+        <a href="https://wa.me/919876543210?text=Hi! I'm interested in {{ plan.name }}"
+           target="_blank" rel="noopener" class="btn-whatsapp">
+          <i class="bi bi-whatsapp"></i> Chat on WhatsApp
+        </a>
+        <div class="whatsapp-sub">Usually replies within 1 hour · Mon–Sat 9AM–7PM</div>
+      </div>
+
+    </div>
+  </div>
+  <!-- /RIGHT -->
+
+</div><!-- /row -->
+
+<!-- ── SIMILAR PLANS ── -->
+{% if similar_plans %}
+<div class="similar-section">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.2rem;flex-wrap:wrap;gap:.5rem;">
+    <h3 style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:600;margin:0;">
+      You May Also Like
+    </h3>
+    <a href="{% url 'plans' %}" style="font-size:.82rem;color:#c9a96e;text-decoration:none;font-weight:600;">
+      View all plans →
+    </a>
+  </div>
+  <div class="row g-3">
+    {% for sp in similar_plans %}
+    <div class="col-md-4">
+      <a href="{% url 'detail' sp.id %}" class="similar-card">
+        {% if sp.image %}
+        <img src="{{ sp.image.url }}" alt="{{ sp.name }}" class="similar-img">
+        {% else %}
+        <div class="similar-img-placeholder">🌸</div>
+        {% endif %}
+        <div class="similar-body">
+          <div class="similar-name">{{ sp.name }}</div>
+          <div class="similar-price">₹{{ sp.price }}</div>
+        </div>
+      </a>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
+
+{% endblock %}

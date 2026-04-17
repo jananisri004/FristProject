@@ -1,0 +1,109 @@
+{% extends 'Event/admin_base.html' %}
+
+{% block page_title %}👥 Users Management{% endblock %}
+
+{% block content %}
+<style>
+    .page-title h2 {
+        margin-bottom: 20px;
+        font-size: 20px;
+    }
+    
+    @media (max-width: 768px) {
+        .table-responsive {
+            font-size: 12px;
+        }
+        .table thead th,
+        .table tbody td {
+            padding: 10px 5px !important;
+        }
+    }
+</style>
+
+<div class="page-title">
+    <h2>👥 All Users</h2>
+</div>
+
+<div class="table-responsive">
+    {% if users %}
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Status</th>
+                    <th>Type</th>
+                    <th>Joined</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td><strong>{{ user.username }}</strong></td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.first_name|default:"-" }}</td>
+                        <td>{{ user.last_name|default:"-" }}</td>
+                        <td>
+                            {% if user.is_active %}
+                                <span class="badge bg-success">Active</span>
+                            {% else %}
+                                <span class="badge bg-danger">Inactive</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if user.is_staff %}
+                                <span class="badge bg-primary">Admin</span>
+                            {% else %}
+                                <span class="badge bg-secondary">User</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ user.date_joined|date:"d M Y" }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class="no-data">
+            <i class="bi bi-inbox" style="font-size: 3rem; color: #ccc;"></i>
+            <p style="margin-top: 15px;">No users found</p>
+        </div>
+    {% endif %}
+</div>
+
+<style>
+    .page-title h2 {
+        margin-bottom: 20px;
+        font-size: 20px;
+    }
+    
+    .no-data {
+        text-align: center;
+        padding: 60px 20px;
+        color: #888;
+    }
+
+    @media (max-width: 768px) {
+        .table-responsive {
+            font-size: 12px;
+        }
+        .table thead th,
+        .table tbody td {
+            padding: 10px 5px !important;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .table {
+            font-size: 11px;
+        }
+        .badge {
+            font-size: 9px;
+            padding: 4px 6px;
+        }
+    }
+</style>
+{% endblock %}

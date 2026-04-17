@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="row justify-content-center">
+
+<div class="col-md-5">
+
+<div class="card p-4 shadow">
+
+<h3 class="text-center mb-3">🚀 Create Account</h3>
+
+<form method="POST">
+{% csrf_token %}
+
+<!-- GLOBAL ERRORS -->
+{% if form.non_field_errors %}
+<div class="alert alert-danger">
+    {{ form.non_field_errors }}
+</div>
+{% endif %}
+
+<!-- USERNAME -->
+<div class="mb-3">
+<label class="form-label">Username</label>
+{{ form.username }}
+<div class="text-danger small">
+    {{ form.username.errors }}
+</div>
+</div>
+
+<!-- EMAIL -->
+<div class="mb-3">
+<label class="form-label">Email</label>
+{{ form.email }}
+<div class="text-danger small">
+    {{ form.email.errors }}
+</div>
+</div>
+
+<!-- PASSWORD -->
+<div class="mb-3 position-relative">
+<label class="form-label">Password</label>
+{{ form.password }}
+<div class="text-danger small">
+    {{ form.password.errors }}
+</div>
+</div>
+
+<!-- CONFIRM PASSWORD -->
+<div class="mb-3 position-relative">
+<label class="form-label">Confirm Password</label>
+{{ form.confirm_password }}
+<div class="text-danger small">
+    {{ form.confirm_password.errors }}
+</div>
+</div>
+
+<!-- BUTTON -->
+<button class="btn btn-success w-100 mt-2">
+    Register 🚀
+</button>
+
+</form>
+
+<!-- LOGIN LINK -->
+<p class="text-center mt-3">
+    Already have an account?
+    <a href="{% url 'login' %}">Login</a>
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+{% endblock %}

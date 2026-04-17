@@ -1,0 +1,226 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2 class="mb-4">📊 Dashboard</h2>
+
+<div class="row text-center">
+
+<div class="col-md-4">
+<div class="card p-4">
+<h5>Total Users</h5>
+<h2>{{ users }}</h2>
+</div>
+</div>
+
+<div class="col-md-4">
+<div class="card p-4">
+<h5>Total Bookings</h5>
+<h2>{{ bookings }}</h2>
+</div>
+</div>
+
+<div class="col-md-4">
+<div class="card p-4">
+<h5>Total Plans</h5>
+<h2>{{ plans }}</h2>
+</div>
+</div>
+
+<div class="col-md-4">
+<div class="card p-4">
+<h5>Add Events
+<h2>{{Add Event}}</h2>
+</div>
+</div>
+
+</div>
+
+<h4 class="mt-4">🔥 Trending Plans</h4>
+
+<!-- TRENDING PLANS -->
+<div class="col-lg-5">
+  <div class="section-card">
+    <div class="section-card-title">
+      <i class="bi bi-fire"></i> Trending Plans
+    </div>
+
+    {% if popular %}
+    {% with max_val=popular.0.total|default:1 %}
+    <div class="mini-bar mb-3">
+      {% for p in popular %}
+      <div class="bar-row">
+        <div class="bar-label">{{ p.name|truncatechars:14 }}</div>
+        <div class="bar-track">
+        {% with max_val=popular.0.total|default:1 %}
+<div class="mini-bar mb-3">
+  {% for p in popular %}
+  <div class="bar-row">
+    <div class="bar-label">{{ p.name|truncatechars:14 }}</div>
+
+    <div class="bar-val">{{ p.total|default:0 }}</div>
+  </div>
+  {% endfor %}
+</div>
+{% endwith %}
+        
+        </div>
+        <div class="bar-val">{{ p.total|default:0 }}</div>
+      </div>
+      {% endfor %}
+    </div>
+    {% endwith %}
+{% endif %}
+
+    <hr style="border-color:#f0ebe3;margin:.8rem 0;">
+
+
+    <!-- LIST -->
+    {% for p in popular %}
+    <div class="trending-item">
+      <div class="d-flex align-items-center gap-2">
+        <div class="trending-rank">{{ forloop.counter }}</div>
+        <div class="trending-name">{{ p.name }}</div>
+      </div>
+      <span class="trending-count">{{ p.total }} bookings</span>
+    </div>
+    {% endfor %}
+
+    {% else %}
+    <p class="text-muted text-center py-3" style="font-size:.87rem;">No bookings yet.</p>
+    {% endif %}
+  </div>
+</div>
+
+<!-- RIGHT COLUMN -->
+<div class="col-lg-7">
+
+  <!-- RECENT BOOKINGS TABLE -->
+  <div class="section-card">
+    <div class="section-card-title">
+      <i class="bi bi-clock-history"></i> Recent Activity
+    </div>
+    {% if recent_bookings %}
+    <div class="table-responsive">
+      <table class="table mb-0">
+        <thead>
+          <tr>
+            <th>User</th>
+            <th>Plan</th>
+            <th>Date</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for b in recent_bookings %}
+          <tr>
+            <td>{{ b.user.username|default:b.user.email }}</td>
+            <td>{{ b.decor_plan.name|truncatechars:18 }}</td>
+            <td>{{ b.event_date }}</td>
+            <td><span class="badge badge-{{ b.status|default:'pending' }} px-2 py-1">{{ b.status|default:'Pending'|capfirst }}</span></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <p class="text-muted text-center py-3" style="font-size:.87rem;">No recent bookings.</p>
+    {% endif %}
+  </div>
+
+  <!-- QUICK LINKS -->
+  <div class="section-card">
+    <div class="section-card-title"><i class="bi bi-lightning-charge"></i> Quick Actions</div>
+    <div class="row g-2">
+      <div class="col-6">
+        <a href="/admin/bookings/booking/" class="quick-link">
+          <i class="bi bi-calendar2-check"></i> Manage Bookings
+        </a>
+      </div>
+      <div class="col-6">
+        <a href="/admin/bookings/decorplan/" class="quick-link">
+          <i class="bi bi-grid"></i> Manage Plans
+        </a>
+      </div>
+      <div class="col-6">
+        <a href="/admin/auth/user/" class="quick-link">
+          <i class="bi bi-people"></i> Manage Users
+        </a>
+      </div>
+      <div class="col-6">
+        <a href="{% url 'plans' %}" class="quick-link">
+          <i class="bi bi-eye"></i> View Site
+        </a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- USERS -->
+<div class="col-md-4">
+  <a href="/admin/auth/user/" class="stat-link-card h-100 d-block">
+    <div class="stat-inner blue h-100">
+      <div class="stat-bg-icon"><i class="bi bi-people-fill"></i></div>
+      <div class="stat-label-top">
+        <i class="bi bi-people-fill" style="color:#0d6efd;"></i>
+        Total Users
+      </div>
+      <div class="stat-number">{{ users }}</div>
+      <div class="stat-footer">
+        <span class="stat-click-hint"><i class="bi bi-cursor"></i> Click to manage</span>
+        <span class="stat-arrow">→ View Users</span>
+      </div>
+    </div>
+  </a>
+</div>
+
+<!-- BOOKINGS -->
+<div class="col-md-4">
+  <a href="/admin/bookings/booking/" class="stat-link-card h-100 d-block">
+    <div class="stat-inner green h-100">
+      <div class="stat-bg-icon"><i class="bi bi-calendar2-check-fill"></i></div>
+      <div class="stat-label-top">
+        <i class="bi bi-calendar2-check-fill" style="color:#198754;"></i>
+        Total Bookings
+      </div>
+      <div class="stat-number">{{ bookings }}</div>
+      <div class="stat-footer">
+        <span class="stat-click-hint"><i class="bi bi-cursor"></i> Click to manage</span>
+        <span class="stat-arrow">→ View Bookings</span>
+      </div>
+    </div>
+  </a>
+</div>
+
+<!-- PLANS -->
+<div class="col-md-4">
+  <a href="/admin/bookings/decorplan/" class="stat-link-card h-100 d-block">
+    <div class="stat-inner purple h-100">
+      <div class="stat-bg-icon"><i class="bi bi-grid-fill"></i></div>
+      <div class="stat-label-top">
+        <i class="bi bi-grid-fill" style="color:#7c3aed;"></i>
+        Total Plans
+      </div>
+      <div class="stat-number">{{ plans }}</div>
+      <div class="stat-footer">
+        <span class="stat-click-hint"><i class="bi bi-cursor"></i> Click to manage</span>
+        <span class="stat-arrow">→ View Plans</span>
+      </div>
+    </div>
+  </a>
+</div>
+<div class="col-md-6">
+  <div class="card p-3">
+    <h5>Add Event</h5>
+    <form method="POST" enctype="multipart/form-data" action="{% url 'add_event' %}">
+      {% csrf_token %}
+      <input type="text" name="name" class="form-control mb-2" placeholder="Event Name" required>
+      <textarea name="description" class="form-control mb-2" placeholder="Description"></textarea>
+      <input type="number" name="price" class="form-control mb-2" placeholder="Price">
+      <input type="file" name="image" class="form-control mb-2">
+      <button class="btn btn-primary w-100">Add Event</button>
+    </form>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container-fluid py-4">
+    <h2 class="mb-4">📊 Admin Dashboard</h2>
+
+    <!-- Statistics Cards -->
+    <div class="row text-center mb-4">
+        <div class="col-md-3">
+            <div class="card p-4 shadow-sm border-0">
+                <h6 class="text-muted">Total Users</h6>
+                <h2 class="text-primary">{{ users }}</h2>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card p-4 shadow-sm border-0">
+                <h6 class="text-muted">Total Bookings</h6>
+                <h2 class="text-success">{{ bookings }}</h2>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card p-4 shadow-sm border-0">
+                <h6 class="text-muted">Decor Plans</h6>
+                <h2 class="text-info">{{ plans }}</h2>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card p-4 shadow-sm border-0">
+                <h6 class="text-muted">Events Added</h6>
+                <h2 class="text-warning">{{ events }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <!-- Trending Plans Section -->
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card p-4 shadow-sm">
+                <h4 class="mb-3">🔥 Trending Plans</h4>
+                {% if popular %}
+                    <ul class="list-group list-group-flush">
+                    {% for p in popular %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span>{{ p.name }}</span>
+                            <span class="badge bg-primary rounded-pill">{{ p.total_bookings|default:0 }} bookings</span>
+                        </li>
+                    {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="text-muted">No plans available yet</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Events Section -->
+        <div class="col-md-6">
+            <div class="card p-4 shadow-sm">
+                <h4 class="mb-3">🎉 Events</h4>
+                {% if all_events %}
+                    <div class="row g-3">
+                        {% for event in all_events %}
+                        <div class="col-12">
+                            <div class="card border-0 shadow-sm">
+                                <div class="row g-0 align-items-center">
+                                    <div class="col-4">
+                                        {% if event.image %}
+                                            <img src="{{ event.image.url }}" class="img-fluid rounded-start" alt="{{ event.name }}" style="height: 90px; object-fit: cover; width: 100%;">
+                                        {% else %}
+                                            <div class="bg-secondary rounded-start" style="height: 90px;"></div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-8">
+                                        <div class="card-body py-2">
+                                            <h6 class="card-title mb-1">{{ event.name }}</h6>
+                                            <p class="card-text text-muted mb-1" style="font-size: 0.85rem;">{{ event.description|truncatewords:10 }}</p>
+                                            <span class="badge bg-success">₹{{ event.price }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-muted">No events added yet</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Bookings Section -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card p-4 shadow-sm">
+                <h4 class="mb-3">📋 Recent Bookings</h4>
+                {% if recent_bookings %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr class="table-light">
+                                    <th>User</th>
+                                    <th>Plan</th>
+                                    <th>Location</th>
+                                    <th>Event Date</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for booking in recent_bookings %}
+                                <tr>
+                                    <td><strong>{{ booking.user.username }}</strong></td>
+                                    <td>{{ booking.decor_plan.name }}</td>
+                                    <td>{{ booking.location }}</td>
+                                    <td>{{ booking.event_date|date:"d M, Y" }}</td>
+                                    <td>
+                                        <span class="badge bg-{% if booking.status == 'confirmed' %}success{% elif booking.status == 'pending' %}warning{% elif booking.status == 'cancelled' %}danger{% else %}info{% endif %}">
+                                            {{ booking.get_status_display }}
+                                        </span>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <p class="text-muted">No bookings yet</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Event Button -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <a href="{% url 'add_event' %}" class="btn btn-primary btn-lg">
+                <i class="bi bi-plus-circle"></i> Add New Event
+            </a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

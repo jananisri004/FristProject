@@ -1,0 +1,207 @@
+{% extends 'Event/admin_base.html' %}
+
+{% block page_title %}📊 Dashboard{% endblock %}
+
+{% block content %}
+<div class="page-title">
+    <h2>📊 Dashboard Overview</h2>
+</div>
+
+<!-- STATISTICS CARDS -->
+<div class="row">
+    <div class="col-md-3 col-sm-6">
+        <div class="stat-card">
+            <div class="stat-card-icon">👥</div>
+            <h5>Total Users</h5>
+            <h3>{{ users }}</h3>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-6">
+        <div class="stat-card">
+            <div class="stat-card-icon">📅</div>
+            <h5>Total Bookings</h5>
+            <h3>{{ bookings }}</h3>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-6">
+        <div class="stat-card">
+            <div class="stat-card-icon">🎨</div>
+            <h5>Decor Plans</h5>
+            <h3>{{ plans }}</h3>
+        </div>
+    </div>
+</div>
+
+<!-- POPULAR PLANS -->
+<h6 class="section-title mt-5">🔥 Top Popular Plans (by bookings)</h6>
+<div class="table-responsive">
+    {% if popular %}
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Plan Name</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                    <th>Bookings</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for plan in popular %}
+                    <tr>
+                        <td><strong>{{ plan.name }}</strong></td>
+                        <td>{{ plan.description|truncatewords:10 }}</td>
+                        <td>₹{{ plan.price }}</td>
+                        <td><span class="badge bg-success">{{ plan.total_bookings }}</span></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class="no-data">No booking data available</div>
+    {% endif %}
+</div>
+
+<!-- RECENT BOOKINGS -->
+<h6 class="section-title mt-5">📋 Recent Bookings</h6>
+<div class="table-responsive">
+    {% if recent_bookings %}
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>User</th>
+                    <th>Plan</th>
+                    <th>Location</th>
+                    <th>Event Date</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for booking in recent_bookings %}
+                    <tr>
+                        <td><strong>{{ booking.user.username }}</strong></td>
+                        <td>{{ booking.decor_plan.name }}</td>
+                        <td>{{ booking.location }}</td>
+                        <td>{{ booking.event_date }}</td>
+                        <td>
+                            <span class="badge 
+                                {% if booking.status == 'pending' %}bg-warning
+                                {% elif booking.status == 'confirmed' %}bg-success
+                                {% elif booking.status == 'in_progress' %}bg-info
+                                {% elif booking.status == 'completed' %}bg-success
+                                {% else %}bg-danger{% endif %}">
+                                {{ booking.get_status_display }}
+                            </span>
+                        </td>
+                        <td>
+                            <a href="{% url 'admin_bookings' %}" class="btn btn-admin btn-edit btn-sm">Manage</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class="no-data">No bookings yet</div>
+    {% endif %}
+</div>
+
+<!-- RECENT EVENTS -->
+<h6 class="section-title mt-5">🎉 Recent Events</h6>
+<div class="table-responsive">
+    {% if all_plans %}
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Event Name</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for event in all_plans %}
+                    <tr>
+                        <td><strong>{{ event.name }}</strong></td>
+                        <td>{{ event.description|truncatewords:10 }}</td>
+                        <td>₹{{ event.price }}</td>
+                        <td>
+                            <div class="action-buttons">
+                                <a href="{% url 'delete_event' event.id %}" class="btn btn-admin btn-delete btn-sm" onclick="return confirm('Are you sure?')">
+                                    <i class="bi bi-trash"></i> Delete
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class="no-data">No events available</div>
+    {% endif %}
+</div>
+
+<style>
+    .page-title h2 {
+        margin-bottom: 20px;
+        font-size: 20px;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .no-data {
+        text-align: center;
+        padding: 40px 20px;
+        color: #888;
+    }
+
+    @media (max-width: 768px) {
+        .row {
+            row-gap: 15px;
+        }
+        
+        .stat-card {
+            padding: 15px;
+        }
+
+        .stat-card h3 {
+            font-size: 22px;
+        }
+
+        .table-responsive {
+            font-size: 12px;
+        }
+
+        .table thead th,
+        .table tbody td {
+            padding: 10px 5px !important;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .stat-card h3 {
+            font-size: 18px;
+        }
+
+        .stat-card h5 {
+            font-size: 10px;
+        }
+
+        .table {
+            font-size: 11px;
+        }
+
+        .btn-sm {
+            font-size: 10px;
+            padding: 4px 8px;
+        }
+
+        .badge {
+            font-size: 9px;
+        }
+    }
+</style>
+{% endblock %}

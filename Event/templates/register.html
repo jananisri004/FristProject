@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="row justify-content-center">
+
+<div class="col-md-5">
+
+<div class="card p-4 shadow">
+
+<h3 class="text-center mb-3">🚀 Create Account</h3>
+
+<div class="auth-logo">Jana<em>Decors</em></div>
+<div class="auth-sub">Luxury Event Decoration · Tamil Nadu</div>
+
+<!-- STEP INDICATOR -->
+<div class="steps">
+  <div class="step-dot active"></div>
+  <div class="step-dot"></div>
+  <div class="step-dot"></div>
+</div>
+
+<div class="auth-heading">Create Account</div>
+
+{% if form.non_field_errors %}
+<div class="alert alert-danger rounded-3 py-2 px-3 mb-3" style="font-size:.87rem;">
+  <i class="bi bi-exclamation-circle me-2"></i>{{ form.non_field_errors }}
+</div>
+{% endif %}
+
+<form method="POST" novalidate>
+  {% csrf_token %}
+
+  <!-- USERNAME -->
+  <div class="mb-3">
+    <label class="form-label">Username</label>
+    <div class="input-icon-wrap">
+      <i class="bi bi-person"></i>
+      {{ form.username }}
+    </div>
+    {% if form.username.errors %}
+    <div class="text-danger mt-1" style="font-size:.78rem;"><i class="bi bi-exclamation-circle me-1"></i>{{ form.username.errors.0 }}</div>
+    {% endif %}
+  </div>
+
+  <!-- EMAIL -->
+  <div class="mb-3">
+    <label class="form-label">Email Address</label>
+    <div class="input-icon-wrap">
+      <i class="bi bi-envelope"></i>
+      {{ form.email }}
+    </div>
+    {% if form.email.errors %}
+    <div class="text-danger mt-1" style="font-size:.78rem;"><i class="bi bi-exclamation-circle me-1"></i>{{ form.email.errors.0 }}</div>
+    {% endif %}
+  </div>
+
+  <!-- PASSWORD -->
+  <div class="mb-3">
+    <label class="form-label">Password</label>
+    <div class="input-icon-wrap">
+      <i class="bi bi-lock"></i>
+      {{ form.password }}
+      <button type="button" class="pw-toggle" onclick="togglePw('id_password',this)">
+        <i class="bi bi-eye"></i>
+      </button>
+    </div>
+    {% if form.password.errors %}
+    <div class="text-danger mt-1" style="font-size:.78rem;">{{ form.password.errors.0 }}</div>
+    {% endif %}
+  </div>
+
+  <!-- CONFIRM PASSWORD -->
+  <div class="mb-4">
+    <label class="form-label">Confirm Password</label>
+    <div class="input-icon-wrap">
+      <i class="bi bi-lock-fill"></i>
+      {{ form.confirm_password }}
+      <button type="button" class="pw-toggle" onclick="togglePw('id_confirm_password',this)">
+        <i class="bi bi-eye"></i>
+      </button>
+    </div>
+    {% if form.confirm_password.errors %}
+    <div class="text-danger mt-1" style="font-size:.78rem;">{{ form.confirm_password.errors.0 }}</div>
+    {% endif %}
+  </div>
+
+  <button type="submit" class="btn btn-gold w-100 py-2 fw-500">
+    <i class="bi bi-rocket me-2"></i>Register &amp; Send OTP
+  </button>
+</form>
+
+<div class="divider-text">or</div>
+
+<p class="text-center mb-0" style="font-size:.85rem;color:#8a7f75;">
+  Already have an account?
+  <a href="{% url 'login' %}" style="color:var(--gold);font-weight:500;">Sign in →</a>
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2>Verify OTP</h2>
+
+<div class="card p-3 shadow">
+
+{% if error %}
+<div class="alert alert-danger">{{ error }}</div>
+{% endif %}
+
+<form method="POST" id="otpForm">
+  {% csrf_token %}
+
+  <!-- VISUAL 6-BOX OTP INPUT -->
+  <div class="otp-inputs">
+    <input class="otp-box" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]" autofocus>
+    <input class="otp-box" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]">
+    <input class="otp-box" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]">
+    <input class="otp-box" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]">
+    <input class="otp-box" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]">
+    <input class="otp-box" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]">
+  </div>
+
+  <!-- Hidden full OTP field -->
+  <input type="hidden" name="otp" id="hiddenOtp">
+
+  <button type="submit" class="btn btn-gold w-100 py-2 mb-3">
+    <i class="bi bi-shield-check me-2"></i>Verify OTP
+  </button>
+</form>
+
+<div class="resend-link">
+  OTP expires in <span id="countdown">02:00</span> &nbsp;·&nbsp;
+  <a href="#" id="resendBtn" style="pointer-events:none;opacity:.4;">Resend OTP</a>
+</div>
+
+<hr class="divider-gold mt-3">
+<p class="mb-0" style="font-size:.8rem;color:#8a7f75;">
+  Wrong email? <a href="{% url 'register' %}" style="color:var(--gold);">Go back</a>
+</p>
+
+</div>
+
+{% endblock %}

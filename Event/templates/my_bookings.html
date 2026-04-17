@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2>My Bookings</h2>
+
+<table class="table table-bordered">
+<tr>
+    <th>Plan</th>
+    <th>Location</th>
+    <th>Date</th>
+</tr>
+
+{% for b in data %}
+<tr>
+    <td>{{ b.decor_plan.name }}</td>
+    <td>{{ b.location }}</td>
+    <td>{{ b.event_date }}</td>
+</tr>
+{% endfor %}
+
+</table>
+
+{% endblock %}

@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}JanaDecors{% endblock %}</title>
+    {% load static %}
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f8f9fa, #e3f2fd);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* 🔱 NAVBAR */
+        .navbar {
+            backdrop-filter: blur(10px);
+            background: rgba(0, 0, 0, 0.8) !important;
+            border-bottom: 2px solid rgba(102, 126, 234, 0.3);
+            padding: 12px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-link {
+            color: white !important;
+            margin: 0 10px;
+            transition: 0.3s;
+            position: relative;
+            font-weight: 500;
+        }
+
+        .nav-link:hover {
+            color: #667eea !important;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background: #667eea;
+            transition: width 0.3s;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        /* 🔶 SIDEBAR */
+        .sidebar {
+            height: calc(100vh - 70px);
+            background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+            padding: 25px 15px;
+            position: fixed;
+            left: 0;
+            top: 70px;
+            width: 280px;
+            overflow-y: auto;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 50;
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        /* 📱 SIDEBAR NAV */
+        .sidebar-nav {
+            list-style: none;
+        }
+
+        .sidebar-nav-item {
+            margin-bottom: 15px;
+        }
+
+        .sidebar-nav-link {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            border-radius: 10px;
+            transition: all 0.3s;
+            font-weight: 500;
+            position: relative;
+        }
+
+        .sidebar-nav-link:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .sidebar-nav-link.active {
+            background: rgba(255, 255, 255, 0.25);
+            color: white;
+            border-left: 4px solid white;
+            padding-left: 11px;
+        }
+
+        .sidebar-nav-link i {
+            width: 25px;
+            margin-right: 12px;
+            font-size: 1.2rem;
+            text-align: center;
+        }
+
+        .sidebar-hr {
+            border: 0;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.2);
+            margin: 20px 0;
+        }
+
+        .sidebar-title {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 10px 15px;
+            margin-top: 10px;
+        }
+
+        .user-profile {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .user-profile-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            font-size: 1.5rem;
+        }
+
+        .user-profile-name {
+            color: white;
+            font-weight: 700;
+            font-size: 0.95rem;
+            margin-bottom: 5px;
+        }
+
+        .user-profile-email {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.8rem;
+            word-break: break-all;
+        }
+
+        /* 📝 MAIN CONTENT */
+        .main-content {
+            margin-left: 280px;
+            margin-top: 70px;
+            padding: 30px;
+            min-height: calc(100vh - 140px);
+        }
+
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 250px;
+            }
+            .main-content {
+                margin-left: 250px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 200px;
+            }
+            .main-content {
+                margin-left: 200px;
+                padding: 20px;
+            }
+            .navbar-toggler {
+                color: white !important;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+                margin-left: 0;
+            }
+            .main-content {
+                margin-left: 0;
+                padding: 15px;
+            }
+            .sidebar-nav-link i {
+                margin-right: 8px;
+            }
+        }
+
+        /* 🧱 CARD */
+        .card {
+            border-radius: 20px;
+            overflow: hidden;
+            border: none;
+            transition: all 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        /* 🌈 HERO */
+        .hero {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 40px 30px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+        }
+
+        /* ✨ BUTTONS */
+        .btn-primary {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(45deg, #764ba2, #667eea);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        /* 🔐 LOGOUT BTN */
+        .logout-btn {
+            margin-top: auto;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            border-radius: 10px;
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s;
+            text-decoration: none;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255, 100, 100, 0.3);
+            border-color: rgba(255, 100, 100, 0.6);
+            color: #ff6464;
+        }
+    </style>
+
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+<!-- 🎯 NAVBAR -->
+<nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="{% url 'plans' %}">
+            <i class="bi bi-heart-fill"></i> JanaDecors
+        </a>
+        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+            <i class="bi bi-list text-white fs-4"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navMenu">
+            <ul class="navbar-nav ms-auto gap-2">
+                {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <span class="text-white-50 d-none d-lg-block" style="font-size:.82rem;">
+                            <i class="bi bi-person-circle me-1"></i>{{ user.username }}
+                        </span>
+                    </li>
+                    <li class="nav-item">
+                        <form action="{% url 'logout' %}" method="POST" class="m-0">
+                            {% csrf_token %}
+                            <button type="submit" class="nav-link border-0 bg-transparent" style="color: #ff6b6b !important;">
+                                <i class="bi bi-box-arrow-right"></i> Logout
+                            </button>
+                        </form>
+                    </li>
+                {% else %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'user_login' %}"><i class="bi bi-box-arrow-in-right"></i> Login</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'register' %}"><i class="bi bi-person-plus"></i> Register</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- 🔶 SIDEBAR & CONTENT -->
+<div class="d-flex">
+    <!-- 📌 SIDEBAR -->
+    <aside class="sidebar">
+        {% if user.is_authenticated %}
+            <!-- User Profile -->
+            <div class="user-profile">
+                <div class="user-profile-avatar">
+                    <i class="bi bi-person-circle"></i>
+                </div>
+                <div class="user-profile-name">{{ user.first_name|default:user.username }}</div>
+                <div class="user-profile-email">{{ user.email }}</div>
+            </div>
+            <hr class="sidebar-hr">
+        {% endif %}
+
+        <!-- Navigation -->
+        <ul class="sidebar-nav">
+            <li class="sidebar-nav-item">
+                <a href="{% url 'plans' %}" class="sidebar-nav-link {% if request.resolver_match.url_name == 'plans' %}active{% endif %}">
+                    <i class="bi bi-house-fill"></i>
+                    <span>Home</span>
+                </a>
+            </li>
+
+            {% if user.is_authenticated %}
+                <li class="sidebar-nav-item">
+                    <a href="{% url 'my_bookings' %}" class="sidebar-nav-link {% if request.resolver_match.url_name == 'my_bookings' %}active{% endif %}">
+                        <i class="bi bi-calendar2-check"></i>
+                        <span>My Bookings</span>
+                    </a>
+                </li>
+
+                <li class="sidebar-nav-item">
+                    <a href="{% url 'wishlist' %}" class="sidebar-nav-link {% if request.resolver_match.url_name == 'wishlist' %}active{% endif %}">
+                        <i class="bi bi-heart-fill text-danger"></i>
+                        <span>My Wishlist</span>
+                    </a>
+                </li>
+
+                {% if user.is_staff %}
+                    <hr class="sidebar-hr">
+                    <div class="sidebar-title">Admin</div>
+                    <li class="sidebar-nav-item">
+                        <a href="{% url 'admin_dashboard' %}" class="sidebar-nav-link {% if request.resolver_match.url_name == 'admin_dashboard' %}active{% endif %}">
+                            <i class="bi bi-speedometer2"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                {% endif %}
+            {% endif %}
+        </ul>
+
+        <!-- Logout Button -->
+        {% if user.is_authenticated %}
+            <hr class="sidebar-hr" style="margin-top: 30px;">
+            <form action="{% url 'logout' %}" method="POST" class="m-0">
+                {% csrf_token %}
+                <button type="submit" class="logout-btn w-100" style="border: none; width: 100%;">
+                    <i class="bi bi-box-arrow-right"></i>
+                    <span>Logout</span>
+                </button>
+            </form>
+        {% endif %}
+    </aside>
+
+    <!-- 📄 MAIN CONTENT -->
+    <main class="main-content w-100">
+        {% block content %}{% endblock %}
+    </main>
+</div>
+
+<!-- Footer -->
+<footer class="text-center py-4" style="background: rgba(0,0,0,0.05); margin-top: 40px;">
+    <p class="text-muted mb-0">© 2026 JanaDecors | Made with <i class="bi bi-heart-fill text-danger"></i></p>
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

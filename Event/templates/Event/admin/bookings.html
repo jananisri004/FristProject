@@ -1,0 +1,157 @@
+{% extends 'Event/admin_base.html' %}
+
+{% block page_title %}📋 Bookings Management{% endblock %}
+
+{% block content %}
+<div class="page-title">
+    <h2>📋 All Bookings</h2>
+</div>
+
+<!-- FILTER BY STATUS -->
+<div style="margin-bottom: 20px;">
+    <form method="GET" class="row g-3 align-items-end">
+        <div class="col-md-3">
+            <label for="statusFilter" class="form-label">Filter by Status:</label>
+            <select id="statusFilter" name="status" class="form-select">
+                <option value="">All Statuses</option>
+                {% for value, label in statuses %}
+                    <option value="{{ value }}" {% if status_filter == value %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary">
+                <i class="bi bi-funnel"></i> Filter
+            </button>
+        </div>
+    </form>
+</div>
+
+<div class="table-responsive">
+    {% if bookings %}
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>User</th>
+                    <th>Decor Plan</th>
+                    <th>Location</th>
+                    <th>Event Date</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for booking in bookings %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td><strong>{{ booking.user.username }}</strong></td>
+                        <td>{{ booking.decor_plan.name }}</td>
+                        <td>{{ booking.location }}</td>
+                        <td>{{ booking.event_date }}</td>
+                        <td>
+                            <span class="badge 
+                                {% if booking.status == 'pending' %}bg-warning
+                                {% elif booking.status == 'confirmed' %}bg-success
+                                {% elif booking.status == 'in_progress' %}bg-info
+                                {% elif booking.status == 'completed' %}bg-success
+                                {% else %}bg-danger{% endif %}">
+                                {{ booking.get_status_display }}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="action-buttons">
+                                <form method="POST" action="{% url 'update_booking_status' booking.id %}" style="display: inline-flex; gap: 8px; align-items: center;">
+                                    {% csrf_token %}
+                                    <select name="status" class="form-select form-select-sm" style="width: 150px;">
+                                        {% for value, label in statuses %}
+                                            <option value="{{ value }}" {% if booking.status == value %}selected{% endif %}>{{ label }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <button type="submit" class="btn btn-sm btn-success">Update</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class="no-data">
+            <i class="bi bi-inbox" style="font-size: 3rem; color: #ccc;"></i>
+            <p style="margin-top: 15px;">No bookings found</p>
+        </div>
+    {% endif %}
+</div>
+
+<style>
+    .page-title h2 {
+        margin-bottom: 20px;
+        font-size: 20px;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .action-buttons form {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+    }
+
+    .no-data {
+        text-align: center;
+        padding: 60px 20px;
+        color: #888;
+    }
+
+    @media (max-width: 768px) {
+        .action-buttons form {
+            flex-direction: column;
+            width: 100%;
+        }
+        .action-buttons form select,
+        .action-buttons form button {
+            width: 100%;
+        }
+
+        .table-responsive {
+            font-size: 12px;
+        }
+
+        .table thead th,
+        .table tbody td {
+            padding: 10px 5px !important;
+        }
+
+        .form-select, .form-select-sm {
+            width: 100% !important;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .table {
+            font-size: 10px;
+        }
+
+        .btn-sm {
+            font-size: 9px;
+            padding: 4px 6px;
+        }
+
+        .badge {
+            font-size: 8px;
+            padding: 3px 5px;
+        }
+
+        .form-select-sm {
+            font-size: 11px;
+            padding: 4px;
+        }
+    }
+</style>
+{% endblock %}

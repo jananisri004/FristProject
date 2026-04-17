@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2>Login</h2>
+
+<div class="auth-logo">
+  <div class="auth-logo-text">Jana<em>Decors</em></div>
+  <div class="auth-logo-tagline">Luxury Event Decoration</div>
+  <div class="auth-logo-line"></div>
+</div>
+
+<div class="auth-heading">Welcome Back</div>
+<div class="auth-sub">Sign in to manage your bookings</div>
+
+{% if form.non_field_errors %}
+<div class="auth-error">
+  <i class="bi bi-exclamation-circle-fill"></i>
+  {{ form.non_field_errors.0 }}
+</div>
+{% endif %}
+
+<form method="POST" novalidate>
+  {% csrf_token %}
+
+  <div class="field-wrap">
+    <label class="field-label" for="id_username">Username or Email</label>
+    <div class="inp-wrap">
+      <i class="bi bi-person inp-icon"></i>
+      <input type="text" name="username" id="id_username" class="inp"
+             placeholder="Enter your username"
+             value="{{ form.username.value|default:'' }}" autocomplete="username">
+    </div>
+    {% if form.username.errors %}
+    <div class="field-error"><i class="bi bi-exclamation-circle"></i>{{ form.username.errors.0 }}</div>
+    {% endif %}
+  </div>
+
+  <div class="field-wrap">
+    <label class="field-label" for="id_password">Password</label>
+    <div class="inp-wrap">
+      <i class="bi bi-lock inp-icon"></i>
+      <input type="password" name="password" id="id_password" class="inp"
+             placeholder="Enter your password" autocomplete="current-password">
+      <button type="button" class="pw-eye" onclick="togglePw()">
+        <i class="bi bi-eye" id="pwIcon"></i>
+      </button>
+    </div>
+    {% if form.password.errors %}
+    <div class="field-error"><i class="bi bi-exclamation-circle"></i>{{ form.password.errors.0 }}</div>
+    {% endif %}
+  </div>
+
+  <div class="forgot-row">
+    <a href="#" class="forgot-link">Forgot password?</a>
+  </div>
+
+  <button type="submit" class="btn-submit">
+    <i class="bi bi-box-arrow-in-right"></i> Sign In
+  </button>
+</form>
+
+<div class="auth-divider">or</div>
+
+<div class="auth-footer">
+  Don't have an account? <a href="{% url 'register' %}">Create one →</a>
+</div>
+
+{% endblock %}
