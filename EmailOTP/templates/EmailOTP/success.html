@@ -1,0 +1,11 @@
+{% extends "EmailOTP/index.html" %}
+
+{% block content %}
+    <div style="margin: 20px; text-align: center; align-items: center;" >
+        <h2 style="color: green;" style="text-align: center;">✓ Login Successful!</h2>
+        <p >Email: <strong>{{ email }}</strong></p>
+        <p >You have successfully verified your OTP and logged in.</p>
+        <br>
+        <a href="/"   style="padding: 10px 20px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px;">Go to Home</a>
+    </div>
+{% endblock %}

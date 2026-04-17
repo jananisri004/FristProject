@@ -1,0 +1,28 @@
+{% extends "EmailOTP/index.html" %}
+
+{% block content %}
+    <div style="margin: 20px; max-width: 400px;">
+        <h2>Verify Your OTP</h2>
+        <p>We've sent an OTP to <strong>{{ email }}</strong></p>
+        
+        {% if error %}
+            <div style="align-items: center;" style="color: red; margin-bottom: 15px; padding: 10px; background-color: #ffe6e6; border-radius: 5px;">
+                <strong>Error:</strong> {{ error }}
+            </div>
+        {% endif %}
+        
+        <form method="post" action="{% url 'verify_otp' %}">
+            {% csrf_token %}
+            <input type="hidden" name="email" value="{{ email }}">
+            
+            <label  style="align-items: center;" for="otp">Enter OTP Code:</label><br><br>
+            <input type="text" id="otp" name="otp" maxlength="6" placeholder="000000" required style="padding: 8px; width: 100%; font-size: 18px; letter-spacing: 8px; text-align: center; box-sizing: border-box;"><br><br>
+            
+            <button style="align-items: center;" type="submit" style="width: 100%; padding: 10px 20px; font-size: 16px; cursor: pointer; background-color: #28a745; color: white; border: none; border-radius: 5px;">Login</button>
+        </form>
+        
+        <p  style="align-items: center;"  style="margin-top: 20px; text-align: center;">
+            <a href="{% url 'send_otp' %}" style="color: #007bff; text-decoration: none;">Use different email?</a>
+        </p>
+    </div>
+{% endblock %}

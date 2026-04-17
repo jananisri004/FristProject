@@ -1,0 +1,20 @@
+{% extends "EmailOTP/index.html" %}
+
+{% block content %}
+    <div style="margin: 20px; max-width: 400px; align-items: center;">
+        <h2>Send OTP to Your Email</h2>
+        
+        {% if error %}
+            <div style="color: red; margin-bottom: 15px; padding: 10px; background-color: #ffe6e6; border-radius: 5px;">
+                <strong>Error:</strong> {{ error }}
+            </div>
+        {% endif %}
+        
+        <form method="post">
+            {% csrf_token %}
+            <label for="email" >Enter your email:</label><br><br>
+            <input type="email" id="email"  name="email" placeholder="example@email.com" required style="padding: 8px; width: 100%; font-size: 14px; box-sizing: border-box;"><br><br>
+            <button type="submit"  style="width: 100%; padding: 10px 20px; font-size: 16px; cursor: pointer; background-color: #007bff; color: white; border: none; border-radius: 5px;">Send OTP</button>
+        </form>
+    </div>
+{% endblock %}
